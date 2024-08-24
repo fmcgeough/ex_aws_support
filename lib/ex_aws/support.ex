@@ -75,6 +75,10 @@ defmodule ExAws.Support do
 
   ## Notes
 
+  There is a lack of clarity in the doc on the format for `after_time` and `before_time`. Most
+  likely an ISO8601 String works. I've seen random examples on the web using the YYYY-MM-DDTHH:MM
+  format (for example, "2024-07-19T16:40").
+
   You must have a Business, Enterprise On-Ramp, or Enterprise Support plan to use the AWS Support
   API.
 
@@ -171,7 +175,7 @@ defmodule ExAws.Support do
 
   ## Notes
 
-  You also use the `describe_services/2` operation to get the category code for a service. Each AWS
+  You can use the `describe_services/2` operation to get the category code for a service. Each AWS
   service defines its own set of category codes.
   """
   @type category_code() :: binary()
@@ -215,8 +219,9 @@ defmodule ExAws.Support do
 
   ## Notes
 
-  Case communications are available for 12 months after creation. String format is:
-  YYYY-MM-DDTHH:MM, for example: 2018-12-19T16:40"
+  Case communications are available for 12 months after creation. String format is not well defined
+  in the AWS doc. However, the format YYYY-MM-DDTHH:MM (for example: "2018-12-19T16:40") seems to
+  appear in some examples.
   """
   @type after_time() :: binary()
 
@@ -230,7 +235,9 @@ defmodule ExAws.Support do
 
   ## Notes
 
-  Case communications are available for 12 months after creation.
+  Case communications are available for 12 months after creation. String format is not well defined
+  in the AWS doc. However, the format YYYY-MM-DDTHH:MM (for example: "2018-12-19T16:40") seems to
+  appear in some examples.
   """
   @type before_time() :: binary()
 
