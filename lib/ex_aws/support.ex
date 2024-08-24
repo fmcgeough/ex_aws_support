@@ -105,7 +105,7 @@ defmodule ExAws.Support do
   @type case_id() :: binary()
 
   @typedoc """
-  The unique identifier for the Trusted Advisor check to refresh.
+  The unique identifier for the Trusted Advisor check
   """
   @type check_id() :: binary()
 
@@ -340,8 +340,9 @@ defmodule ExAws.Support do
   - include_resolved_cases - Specifies whether resolved support cases should be included in the
   `describe_cases/1` results. The default is false. If you are not getting data back and you expect
   to, ensure that you are setting this to true.
-  - language - The human language in which AWS Support handles the case. English and Japanese are
-  currently supported.
+  * language - The ISO 639-1 code for the language in which AWS provides support.
+  Language parameters must be passed explicitly for operations that take them. The
+  default is "en".
   - max_results: The maximum number of results to return before paginating
   - next_token: A resumption point for pagination
   """
@@ -757,7 +758,7 @@ defmodule ExAws.Support do
   ## Parameter Descriptions
 
   * case_id - The support case ID requested or returned in the call
-  * describe_communications_optional = optional data
+  * describe_communications_optional - optional data
 
   ## Notes
 
@@ -832,7 +833,9 @@ defmodule ExAws.Support do
   * service_code - The code for the AWS service
   * category_code - The category of problem for the support case.
   * issue_type - The type of issue for the case
-  * language - The language in which AWS Support handles the case
+  * language - The ISO 639-1 code for the language in which AWS provides support.
+  Language parameters must be passed explicitly for operations that take them. The
+  default is "en".
 
   ## Notes
 
@@ -879,7 +882,9 @@ defmodule ExAws.Support do
 
   ## Parameter Descriptions
 
-  * language - The language in which AWS Support handles the case (the default is "en")
+  * language - The ISO 639-1 code for the language in which AWS provides support.
+  Language parameters must be passed explicitly for operations that take them. The
+  default is "en".
   * service_code_list - list of service codes available for AWS services
 
   ## Notes
@@ -923,6 +928,11 @@ defmodule ExAws.Support do
   @doc """
   Returns the list of severity levels that you can assign to an AWS Support case
 
+  ## Parameter Descriptions
+
+  * language - The ISO 639-1 code for the language in which AWS provides support. Language
+    parameters must be passed explicitly for operations that take them. The default is "en".
+
   ## Notes
 
   The severity level for a case is also a field in the CaseDetails data type
@@ -931,8 +941,8 @@ defmodule ExAws.Support do
   ## Parameter Descriptions
 
   * language - The ISO 639-1 code for the language in which AWS provides support.
-  AWS Support currently supports English ("en") and Japanese ("ja"). Language
-  parameters must be passed explicitly for operations that take them.
+  Language parameters must be passed explicitly for operations that take them. The
+  default is "en".
 
   ## Examples
 
@@ -1010,12 +1020,16 @@ defmodule ExAws.Support do
   Returns the refresh status of the Trusted Advisor checks that have the
   specified check IDs
 
+  ## Parameter Descriptions
+
+  - check_ids - a list of `t:check_id/0` Strings
+
   ## Notes
 
   Check IDs can be obtained by calling `describe_trusted_advisor_checks/1`.
 
   Some checks are refreshed automatically, and their refresh statuses cannot be retrieved by using
-  this operation. Use of the describe_trusted_advisor_check_refresh_statuses operation for these
+  this operation. Use of the `describe_trusted_advisor_check_refresh_statuses/1` operation for these
   checks causes an InvalidParameterValue error.
 
   To call the AWS Trusted Advisor operations in the AWS Support API, you must use the US East (N.
@@ -1053,6 +1067,13 @@ defmodule ExAws.Support do
 
   @doc """
   Returns the results of the Trusted Advisor check that has the specified check ID
+
+  ## Parameter Descriptions
+
+  * check_id - The unique identifier for the Trusted Advisor check
+  * language - The ISO 639-1 code for the language in which AWS provides support.
+  Language parameters must be passed explicitly for operations that take them. The
+  default is "en".
 
   ## Notes
 
@@ -1102,6 +1123,12 @@ defmodule ExAws.Support do
   Returns information about all available Trusted Advisor checks, including name, ID, category,
   description, and metadata
 
+  ## Parameter Descriptions
+
+  * language - The ISO 639-1 code for the language in which AWS provides support.
+  Language parameters must be passed explicitly for operations that take them. The
+  default is "en".
+
   ## Notes
 
   You must specify a language code; English ("en") and Japanese ("ja") are currently supported. The
@@ -1145,6 +1172,10 @@ defmodule ExAws.Support do
   @doc """
   Returns the summaries of the results of the Trusted Advisor checks that have the specified check
   IDs
+
+  ## Parameter Descriptions
+
+  - check_ids - a list of `t:check_id/0` Strings
 
   ## Notes
 
@@ -1190,6 +1221,10 @@ defmodule ExAws.Support do
 
   @doc """
   Requests a refresh of the Trusted Advisor check that has the specified check_id
+
+  ## Parameter Descriptions
+
+  - check_id - The unique identifier for the Trusted Advisor check
 
   ## Notes
 
@@ -1238,6 +1273,10 @@ defmodule ExAws.Support do
   @doc """
   Takes a case_id and returns the initial state of the case along with the state of the case after
   the call to resolve_case completed
+
+  ## Parameter Descriptions
+
+  - case_id - The AWS Support case id that you are resolving
 
   ## Examples
 
