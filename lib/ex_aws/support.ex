@@ -2,6 +2,79 @@ defmodule ExAws.Support do
   @moduledoc """
   Operations for AWS Support API
 
+  The documentation and types provided lean heavily on the [AWS documentation for
+  AWS Support](https://docs.aws.amazon.com/awssupport/latest/APIReference/API_Operations.html).
+  The AWS documentation is the definitive source of information and should be consulted to
+  understand how to use AWS Support and its API functions. The documentation on types and
+  functions in the library may be helpful but it is merely helpful. It does not attempt to
+  provide an explanation for how to use AWS Support.
+
+  The library does not try to provide protection against invalid values, length restriction
+  violations, or violations of pattern matching defined in the API documentation. There is some
+  minimal checking for correct types but, generally, the data passed by the app is converted to
+  a JSON representation and the error will be returned by the API when it is called.
+
+  Generally the functions take required parameters separately from any optional arguments. The
+  optional arguments are passed as a Map (with a defined type).
+
+  The defined types used to pass optional arguments use the standard Elixir snake-case for keys. The
+  API itself uses camel-case Strings for keys. The library provides the conversion. Most of the API
+  keys use a lower-case letter for the first word and upper-case for the subsequent words. If there
+  are exceptions to this rule they are handled by the library so an Elixir developer can just use
+  standard snake-case for all the keys.
+
+  ## Types of Operations
+
+  The API provides two different groups of operations:
+
+  - Support case management operations to manage the entire life cycle of your AWS support cases, from creating a case to resolving it
+  - AWS Trusted Advisor operations to access AWS Trusted Advisor checks
+
+  ### Support Case Management
+
+  Support Case Management API's provide the following:
+
+  - Open a support case
+  - Get a list and detailed information about recent support cases
+  - Filter your search for support cases by dates and case identifiers, including resolved cases
+  - Add communications and file attachments to your cases, and add the email recipients for case
+    correspondences. You can attach up to three files. Each file can be up to 5 MB
+  - Resolve your cases
+
+  ### AWS Trusted Advisor
+
+  AWS Trusted Advisor API's provide the following:
+
+  - Get the names and identifiers for the Trusted Advisor checks
+  - Request that a Trusted Advisor check be run against your AWS account and resources
+  - Get summaries and detailed information for your Trusted Advisor check results
+  - Refresh your Trusted Advisor checks
+  - Get the status of each Trusted Advisor check
+
+  ## Endpoints
+
+  AWS Support is a global service. This means that any endpoint that you use will update your
+  support cases in the Support Center Console.
+
+  For example, if you use the US East (N. Virginia) endpoint to create a case, you can use the US
+  West (Oregon) or Europe (Ireland) endpoint to add a correspondence to the same case.
+
+  You can use the following endpoints for the AWS Support API:
+
+  - US East (N. Virginia) – https://support.us-east-1.amazonaws.com
+  - US West (Oregon) – https://support.us-west-2.amazonaws.com
+  - Europe (Ireland) – https://support.eu-west-1.amazonaws.com
+
+  If you call the CreateCase operation to create test support cases, then AWS recommends that you
+  include a subject line, such as TEST CASE-Please ignore. After you're done with your test support
+  case, call the `resolve_case/1` operation to resolve it.
+
+  To call the AWS Trusted Advisor operations in the AWS Support API, you must use the US East (N.
+  Virginia) endpoint. Currently, the US West (Oregon) and Europe (Ireland) endpoints don't support
+  the Trusted Advisor operations.
+
+  ## Notes
+
   You must have a Business, Enterprise On-Ramp, or Enterprise Support plan to use the AWS Support
   API.
 
@@ -81,8 +154,8 @@ defmodule ExAws.Support do
   should not exceed 5 MB. File types that are supported include the following:
   pdf, jpeg, doc, log, text
 
-  - data - Base64-encoded binary data object
-  - file_name - The name of the attachment file
+  - data - attachment file contents, base64 encoded binary data object (see `Base.encode64/1`).
+  - file_name - attachment filename
   """
   @type attachment() ::
           [{:data, binary()}, {:file_name, binary()}]
@@ -321,7 +394,8 @@ defmodule ExAws.Support do
   ## Parameter Descriptions
 
   * attachments - One or more attachments to add to the set
-  * attachment_set_id - The ID of the attachment set (to add the attachments to)
+  * attachment_set_id - The ID of the attachment set (to add the attachments to). If nil is provided
+    for this then a new attachment set is created
 
   ## Notes
 
